@@ -1,30 +1,29 @@
 FROM ubuntu:20.04
+
 LABEL first_dockerfile_by="Ganraj"
-# Avoid prompts during package installs
+
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install Java and wget
 RUN apt update && apt install default-jdk wget -y
 
-# Set Tomcat version
+# Set valid Tomcat version
 ENV TOMCAT_VERSION=9.0.87
 
-# Download and extract Tomcat
-RUN wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.87/bin/apache-tomcat-9.0.87.tar.gz && \
+# Download and set up Tomcat
+RUN wget https://dlcdn.apache.org/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz && \
     tar -xzf apache-tomcat-${TOMCAT_VERSION}.tar.gz && \
     mv apache-tomcat-${TOMCAT_VERSION} /opt/tomcat && \
     rm apache-tomcat-${TOMCAT_VERSION}.tar.gz
 
-# Make sure scripts are executable
+# Permissions
 RUN chmod +x /opt/tomcat/bin/*.sh
 
-# Set environment variable for Tomcat path
+# Set env & working dir
 ENV CATALINA_HOME=/opt/tomcat
-
-# Set working directory (optional)
 WORKDIR /opt/tomcat
 
-# Expose Tomcat port
+# Expose port
 EXPOSE 8080
 
 # Start Tomcat
