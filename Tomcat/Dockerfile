@@ -1,7 +1,5 @@
 FROM ubuntu:20.04
-
 LABEL first_dockerfile_by="Ganraj"
-
 # Avoid prompts during package installs
 ENV DEBIAN_FRONTEND=noninteractive
 
