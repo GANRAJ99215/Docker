@@ -11,7 +11,7 @@ RUN apt update && apt install default-jdk wget -y
 ENV TOMCAT_VERSION=9.0.87
 
 # Download and set up Tomcat
-RUN wget https://dlcdn.apache.org/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz && \
+RUN wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.87/bin/apache-tomcat-9.0.87.tar.gz && \
     tar -xzf apache-tomcat-${TOMCAT_VERSION}.tar.gz && \
     mv apache-tomcat-${TOMCAT_VERSION} /opt/tomcat && \
     rm apache-tomcat-${TOMCAT_VERSION}.tar.gz
