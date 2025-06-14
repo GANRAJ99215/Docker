@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM tomcat:9.0.87-jdk17
 
 LABEL maintainer="Ganraj"
 
