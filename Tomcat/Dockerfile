@@ -1,29 +1,35 @@
+# Use Ubuntu 20.04 as base
 FROM ubuntu:20.04
 
 LABEL maintainer="Ganraj"
 
+# Prevent interactive prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TOMCAT_VERSION=9.0.87
-ENV CATALINA_HOME=/opt/tomcat
 
 # Install Java and wget
-RUN apt update && apt install -y default-jdk wget tar && apt clean
+RUN apt update && \
+    apt install -y default-jdk wget curl tar && \
+    apt clean
 
-# Set working directory
-WORKDIR /tmp
+# Set Tomcat environment variable
+ENV CATALINA_HOME /opt/tomcat
+ENV PATH $CATALINA_HOME/bin:$PATH
 
-# Download and extract Tomcat (NO ENV interpolation issue here)
-RUN wget https://downloads.apache.org/tomcat/tomcat-9/v9.0.87/bin/apache-tomcat-9.0.87.tar.gz && \
-    tar -xzf apache-tomcat-9.0.87.tar.gz && \
-    mv apache-tomcat-9.0.87 /opt/tomcat && \
-    rm apache-tomcat-9.0.87.tar.gz
+# Download and install Tomcat
+RUN wget https://downloads.apache.org/tomcat/tomcat-9/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz && \
+    tar xzf apache-tomcat-$TOMCAT_VERSION.tar.gz && \
+    mv apache-tomcat-$TOMCAT_VERSION /opt/tomcat && \
+    rm apache-tomcat-$TOMCAT_VERSION.tar.gz
 
-# Permission to execute startup scripts
+# Make startup scripts executable
 RUN chmod +x /opt/tomcat/bin/*.sh
 
-# Set workdir and expose port
+# Set working directory
 WORKDIR /opt/tomcat
+
+# Expose default Tomcat port
 EXPOSE 8080
 
 # Start Tomcat in foreground
-CMD ["./bin/catalina.sh", "run"]
+CMD ["catalina.sh", "run"]
